@@ -62,6 +62,11 @@ używających biblioteki ocaml-compiler-libs.
 %prep
 %setup -q -n ocaml-compiler-libs-v%{version}
 
+%if %{without ocaml_opt}
+# %{_libdir}/ocaml/compiler-libs/ocamloptcomp.cma not available
+%{__rm} src/ocaml_optcomp/dune
+%endif
+
 %build
 dune build --verbose
 
@@ -85,17 +90,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/ocaml-compiler-libs/META
 %dir %{_libdir}/ocaml/ocaml-compiler-libs/bytecomp
 %dir %{_libdir}/ocaml/ocaml-compiler-libs/common
-%dir %{_libdir}/ocaml/ocaml-compiler-libs/optcomp
 %dir %{_libdir}/ocaml/ocaml-compiler-libs/shadow
 %dir %{_libdir}/ocaml/ocaml-compiler-libs/toplevel
 %{_libdir}/ocaml/ocaml-compiler-libs/bytecomp/*.cma
 %{_libdir}/ocaml/ocaml-compiler-libs/common/*.cma
-%{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cma
 %{_libdir}/ocaml/ocaml-compiler-libs/shadow/*.cma
 %{_libdir}/ocaml/ocaml-compiler-libs/toplevel/*.cma
 %if %{with ocaml_opt}
 %attr(755,root,root) %{_libdir}/ocaml/ocaml-compiler-libs/bytecomp/*.cmxs
 %attr(755,root,root) %{_libdir}/ocaml/ocaml-compiler-libs/common/*.cmxs
+%dir %{_libdir}/ocaml/ocaml-compiler-libs/optcomp
+%{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cma
 %attr(755,root,root) %{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmxs
 %attr(755,root,root) %{_libdir}/ocaml/ocaml-compiler-libs/shadow/*.cmxs
 %attr(755,root,root) %{_libdir}/ocaml/ocaml-compiler-libs/toplevel/*.cmxs
@@ -109,8 +114,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/ocaml-compiler-libs/bytecomp/*.cmt
 %{_libdir}/ocaml/ocaml-compiler-libs/common/*.cmi
 %{_libdir}/ocaml/ocaml-compiler-libs/common/*.cmt
-%{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmi
-%{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmt
 %{_libdir}/ocaml/ocaml-compiler-libs/shadow/*.cmi
 %{_libdir}/ocaml/ocaml-compiler-libs/shadow/*.cmt
 %{_libdir}/ocaml/ocaml-compiler-libs/toplevel/*.cmi
@@ -123,6 +126,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/ocaml-compiler-libs/common/*.cmx
 %{_libdir}/ocaml/ocaml-compiler-libs/common/*.cmxa
 %{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.a
+%{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmi
+%{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmt
 %{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmx
 %{_libdir}/ocaml/ocaml-compiler-libs/optcomp/*.cmxa
 %{_libdir}/ocaml/ocaml-compiler-libs/shadow/*.a
